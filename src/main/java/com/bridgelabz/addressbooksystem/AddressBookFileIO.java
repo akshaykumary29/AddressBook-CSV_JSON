@@ -10,9 +10,10 @@ import java.util.List;
 public class AddressBookFileIO {
     public static void writeData(List<ContactDetail> addressBook, String filename) {
 
+
         StringBuffer addressBookBuffer = new StringBuffer();
-        addressBook.forEach(Contact -> {
-            String addressBookString = Contact.toString().concat("\n");
+        addressBook.forEach(ContactPerson -> {
+            String addressBookString = ContactPerson.toString().concat("\n");
             addressBookBuffer.append(addressBookString);
         });
 
@@ -28,9 +29,9 @@ public class AddressBookFileIO {
     public static List<String> readDataFromFile(String filename) {
 
         List<String> addressBookList = new ArrayList<String>();
-        String bookName =filename;
-        String fileName = bookName+".txt";
-        System.out.println("Reading from : "+fileName+"\n");
+        String bookName = filename;
+        String fileName = bookName + ".txt";
+        System.out.println("Reading from : " + fileName + "\n");
         try {
             Files.lines(new File(fileName).toPath())
                     .map(line -> line.trim())
@@ -39,10 +40,31 @@ public class AddressBookFileIO {
                         addressBookList.add(employeeDetails);
                     });
 
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return addressBookList;
+    }
+
+    public void display(String fileName) {
+
+        try {
+            Files.lines(new File(fileName).toPath()).forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public long countEntries(String fileName) {
+
+        long entries = 0;
+        try {
+            entries = Files.lines(new File(fileName).toPath()).count();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ;
+        return entries;
     }
 }

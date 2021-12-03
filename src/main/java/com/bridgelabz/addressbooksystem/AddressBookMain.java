@@ -1,5 +1,10 @@
 package com.bridgelabz.addressbooksystem;
 
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import com.opencsv.exceptions.CsvValidationException;
+
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -23,7 +28,7 @@ public class AddressBookMain {
         return false;
     }
 
-    private static void addressMenu(AddressBook addressBook) {
+    private static void addressMenu(AddressBook addressBook) throws CsvValidationException {
         Scanner sc = new Scanner(System.in);
         int option = 0;
         boolean exit = true;
@@ -34,7 +39,9 @@ public class AddressBookMain {
                     + " 9: sort by name 10:sort by zip 11: sort by city "
                     + "12: sort by state 13:Switch Address Book"
                     + "13: Write to file"
-                    + "14. Read from file");
+                    + "14. Read from file"
+                    + "15. Write to CSV"
+                    + "16. Read from CSV");
             option = sc.nextInt();
             switch (option) {
                 case 1:
@@ -94,6 +101,20 @@ public class AddressBookMain {
                 case 14:
                     List<String> listaddressBook = addressBook.read();
                     break;
+                case 15:
+                    try {
+                        addressBook.writeDataToCSV();
+                    } catch (IOException | CsvRequiredFieldEmptyException | CsvDataTypeMismatchException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case 16:
+                    try {
+                        addressBook.readDataFromCSV();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
 
                 default:
                     exit = false;
@@ -103,7 +124,7 @@ public class AddressBookMain {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws CsvValidationException {
         System.out.println("Welcome to address book program");
         Scanner sc = new Scanner(System.in);
 
